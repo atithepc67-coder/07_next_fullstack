@@ -1,21 +1,22 @@
 // app/page.js
 
-import Image from 'next/image';
-import Link from 'next/link';
+// ... imports
 
-// ฟังก์ชันสำหรับดึงข้อมูล
-async function getPlayers() {
-  // เราเรียก API ที่เราเพิ่งสร้างขึ้นมา
-  // (นี่คือการ fetch ข้อมูลแบบ Server-side)
-  const res = await fetch('http://api/players', {
-    cache: 'no-store' // เพื่อให้ข้อมูลอัปเดตเสมอ
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch players');
-  }
-  return res.json();
+// ✅ เพิ่มฟังก์ชันนี้ (ถ้ายังไม่ได้แยกไฟล์ utils)
+function getBaseUrl() {
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return 'http://localhost:3000';
 }
+
+async function getPlayers() {
+  const baseUrl = getBaseUrl();
+  const res = await fetch(`${baseUrl}/api/players`, { // <--- ใช้ baseUrl
+    cache: 'no-store'
+  });
+  // ...
+}
+
+// ... (ส่วนที่เหลือเหมือนเดิม)
 
 export default async function HomePage() {
   const players = await getPlayers();

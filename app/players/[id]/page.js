@@ -3,22 +3,27 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-// ฟังก์ชันสำหรับดึงข้อมูลผู้เล่นคนเดียว
+// ✅ เพิ่มฟังก์ชันนี้ไว้บนสุดของไฟล์ (หรือแยกไปไว้ใน utils ก็ได้)
+function getBaseUrl() {
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return 'http://localhost:3000';
+}
+
 async function getPlayerById(id) {
-  // เราจะเรียก API ที่คุณเพิ่งทำเสร็จ
-  const res = await fetch(`http://localhost:3000/api/players/${id}`, {
+  // ✅ เรียกใช้ฟังก์ชันเพื่อเอา URL ที่ถูกต้อง
+  const baseUrl = getBaseUrl();
+  const res = await fetch(`${baseUrl}/api/players/${id}`, { // <--- ใช้ baseUrl
     cache: 'no-store'
   });
 
   if (!res.ok) {
-    if (res.status === 404) {
-      return null;
-    }
+    if (res.status === 404) return null;
     throw new Error('Failed to fetch player');
   }
   return res.json();
 }
 
+// ... (ส่วนที่เหลือเหมือนเดิม)
 export default async function PlayerDetailPage({ params }) {
   const { id } = params;
   const player = await getPlayerById(id);

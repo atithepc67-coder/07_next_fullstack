@@ -1,8 +1,9 @@
 // app/page.js
 
-// ... imports
+import Image from 'next/image'; // <-- แก้แล้ว
+import Link from 'next/link';   // <-- แก้แล้ว
 
-// ✅ เพิ่มฟังก์ชันนี้ (ถ้ายังไม่ได้แยกไฟล์ utils)
+// ฟังก์ชันสำหรับดึงข้อมูล
 function getBaseUrl() {
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
   return 'http://localhost:3000';
@@ -10,13 +11,15 @@ function getBaseUrl() {
 
 async function getPlayers() {
   const baseUrl = getBaseUrl();
-  const res = await fetch(`${baseUrl}/api/players`, { // <--- ใช้ baseUrl
+  const res = await fetch(`${baseUrl}/api/players`, {
     cache: 'no-store'
   });
-  // ...
-}
 
-// ... (ส่วนที่เหลือเหมือนเดิม)
+  if (!res.ok) {
+    throw new Error('Failed to fetch players');
+  }
+  return res.json();
+}
 
 export default async function HomePage() {
   const players = await getPlayers();
@@ -30,8 +33,8 @@ export default async function HomePage() {
             <Image
               src={player.coverimage}
               alt={player.name}
-              width={300} // ต้องกำหนดขนาด
-              height={169} // ต้องกำหนดขนาด
+              width={300}
+              height={169}
               style={{ width: '100%', height: 'auto', borderRadius: '4px' }}
             />
             <h2>{player.name}</h2>

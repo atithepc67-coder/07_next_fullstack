@@ -1,17 +1,14 @@
 // app/page.js
 
-import Image from 'next/image'; // <-- แก้แล้ว
-import Link from 'next/link';   // <-- แก้แล้ว
+import Image from 'next/image';
+import Link from 'next/link';
 
 // ฟังก์ชันสำหรับดึงข้อมูล
-function getBaseUrl() {
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  return 'http://localhost:3000';
-}
-
 async function getPlayers() {
-  const baseUrl = getBaseUrl();
-  const res = await fetch(`${baseUrl}/api/players`, {
+  //
+  // ✅✅✅ แก้เป็นแบบนี้: ใช้ Path ธรรมดา
+  //
+  const res = await fetch('/api/players', {
     cache: 'no-store'
   });
 

@@ -7,7 +7,7 @@ import Link from 'next/link';
 async function getPlayers() {
   // เราเรียก API ที่เราเพิ่งสร้างขึ้นมา
   // (นี่คือการ fetch ข้อมูลแบบ Server-side)
-  const res = await fetch('http://localhost:3000/api/players', {
+  const res = await fetch('http://api/players', {
     cache: 'no-store' // เพื่อให้ข้อมูลอัปเดตเสมอ
   });
 
